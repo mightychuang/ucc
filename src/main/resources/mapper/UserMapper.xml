@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhly.user.mapper.UserMapper">
+
+  <cache type="com.hhly.user.component.UserMybatisRedisCache" flushInterval="86400000"/>
+
+  <resultMap id="BaseResultMap" type="com.hhly.user.entity.User">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="UUID" jdbcType="VARCHAR" property="uuid" />
+    <result column="LOGIN_NAME" jdbcType="VARCHAR" property="loginName" />
+    <result column="REAL_NAME" jdbcType="VARCHAR" property="realName" />
+    <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+    <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+    <result column="EMAIL" jdbcType="VARCHAR" property="email" />
+    <result column="STATE" jdbcType="TINYINT" property="state" />
+    <result column="STATE_DESC" jdbcType="VARCHAR" property="stateDesc" />
+    <result column="ACC_TYPE" jdbcType="TINYINT" property="accType" />
+    <result column="REG_TYPE" jdbcType="TINYINT" property="regType" />
+    <result column="IS_AUTH" jdbcType="TINYINT" property="isAuth" />
+    <result column="APP_CODE" jdbcType="VARCHAR" property="appCode" />
+    <result column="REG_DEVICE_TYPE" jdbcType="VARCHAR" property="regDeviceType" />
+    <result column="REG_DEVICE_ID" jdbcType="VARCHAR" property="regDeviceId" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="CREATE_USER" jdbcType="VARCHAR" property="createUser" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="UPDATE_USER" jdbcType="VARCHAR" property="updateUser" />
+    <result column="IS_DELETE" jdbcType="TINYINT" property="isDelete" />
+  </resultMap>
+
+  <resultMap id="BaseResultMap2" type="com.hhly.user.api.dto.response.UserDetailResp">
+    <result column="UUID" jdbcType="VARCHAR" property="userId" />
+    <result column="LOGIN_NAME" jdbcType="VARCHAR" property="loginName" />
+    <result column="REAL_NAME" jdbcType="VARCHAR" property="realName" />
+    <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+    <result column="EMAIL" jdbcType="VARCHAR" property="email" />
+    <result column="STATE" jdbcType="TINYINT" property="state" />
+    <result column="STATE_DESC" jdbcType="VARCHAR" property="stateDesc" />
+    <result column="ACC_TYPE" jdbcType="TINYINT" property="accType" />
+    <result column="REG_TYPE" jdbcType="TINYINT" property="regType" />
+    <result column="IS_AUTH" jdbcType="TINYINT" property="isAuth" />
+    <result column="APP_CODE" jdbcType="VARCHAR" property="appCode" />
+    <result column="REG_DEVICE_TYPE" jdbcType="VARCHAR" property="regDeviceType" />
+    <result column="REG_DEVICE_ID" jdbcType="VARCHAR" property="regDeviceId" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="CREATE_USER" jdbcType="VARCHAR" property="createUser" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="UPDATE_USER" jdbcType="VARCHAR" property="updateUser" />
+    <result column="IS_DELETE" jdbcType="TINYINT" property="isDelete" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List">
+    ID, UUID, LOGIN_NAME, REAL_NAME, PASSWORD, PHONE, EMAIL, STATE, STATE_DESC,ACC_TYPE,
+    REG_TYPE, IS_AUTH, APP_CODE, REG_DEVICE_TYPE,REG_DEVICE_ID,CREATE_TIME, CREATE_USER, UPDATE_TIME, UPDATE_USER, IS_DELETE
+  </sql>
+  <sql id="Base_Column_List2">
+    UUID, LOGIN_NAME, REAL_NAME, PHONE, EMAIL, STATE, STATE_DESC,ACC_TYPE,
+    REG_TYPE, IS_AUTH, APP_CODE, REG_DEVICE_TYPE,REG_DEVICE_ID,CREATE_TIME, CREATE_USER, UPDATE_TIME, UPDATE_USER, IS_DELETE
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    FROM T_USER
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from T_USER
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.hhly.user.entity.User">
+    insert into T_USER
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="uuid != null">
+        UUID,
+      </if>
+      <if test="loginName != null">
+        LOGIN_NAME,
+      </if>
+      <if test="realName != null">
+        REAL_NAME,
+      </if>
+      <if test="password != null">
+        PASSWORD,
+      </if>
+      <if test="phone != null">
+        PHONE,
+      </if>
+      <if test="email != null">
+        EMAIL,
+      </if>
+      <if test="state != null">
+        STATE,
+      </if>
+      <if test="stateDesc != null">
+        STATE_DESC,
+      </if>
+      <if test="accType != null">
+        ACC_TYPE,
+      </if>
+      <if test="regType != null">
+        REG_TYPE,
+      </if>
+      <if test="isAuth != null">
+        IS_AUTH,
+      </if>
+      <if test="appCode != null">
+        APP_CODE,
+      </if>
+      <if test="regDeviceType != null">
+        REG_DEVICE_TYPE,
+      </if>
+      <if test="regDeviceId != null">
+        REG_DEVICE_ID,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="createUser != null">
+        CREATE_USER,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+      <if test="updateUser != null">
+        UPDATE_USER,
+      </if>
+      <if test="isDelete != null">
+        IS_DELETE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="uuid != null">
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="loginName != null">
+        #{loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null">
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=TINYINT},
+      </if>
+      <if test="stateDesc != null">
+        #{stateDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="accType != null">
+        #{accType,jdbcType=TINYINT},
+      </if>
+      <if test="regType != null">
+        #{regType,jdbcType=TINYINT},
+      </if>
+      <if test="isAuth != null">
+        #{isAuth,jdbcType=TINYINT},
+      </if>
+      <if test="appCode != null">
+        #{appCode,jdbcType=VARCHAR},
+      </if>
+      <if test="regDeviceType != null">
+        #{regDeviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="regDeviceId != null">
+        #{regDeviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hhly.user.entity.User">
+    update T_USER
+    <set>
+      <if test="realName != null">
+        REAL_NAME = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        PHONE = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        STATE = #{state,jdbcType=TINYINT},
+      </if>
+      <if test="stateDesc != null">
+        STATE_DESC = #{stateDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="accType != null">
+        ACC_TYPE = #{accType,jdbcType=TINYINT},
+      </if>
+      <if test="regType != null">
+        REG_TYPE = #{regType,jdbcType=TINYINT},
+      </if>
+      <if test="isAuth != null">
+        IS_AUTH = #{isAuth,jdbcType=TINYINT},
+      </if>
+      <if test="appCode != null">
+        APP_CODE = #{appCode,jdbcType=VARCHAR},
+      </if>
+      <if test="regDeviceType != null">
+        REG_DEVICE_TYPE = #{regDeviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="regDeviceId != null">
+        REG_DEVICE_ID = #{regDeviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        CREATE_USER = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        UPDATE_USER = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        IS_DELETE = #{isDelete,jdbcType=TINYINT},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByUserIdSelective" parameterType="com.hhly.user.entity.User">
+    update T_USER
+    <set>
+      <if test="loginName != null">
+        LOGIN_NAME = #{loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null">
+        REAL_NAME = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        PHONE = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        STATE = #{state,jdbcType=TINYINT},
+      </if>
+      <if test="stateDesc != null">
+        STATE_DESC = #{stateDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="accType != null">
+        ACC_TYPE = #{accType,jdbcType=TINYINT},
+      </if>
+      <if test="regType != null">
+        REG_TYPE = #{regType,jdbcType=TINYINT},
+      </if>
+      <if test="isAuth != null">
+        IS_AUTH = #{isAuth,jdbcType=TINYINT},
+      </if>
+      <if test="appCode != null">
+        APP_CODE = #{appCode,jdbcType=VARCHAR},
+      </if>
+      <if test="regDeviceType != null">
+        REG_DEVICE_TYPE = #{regDeviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="regDeviceId != null">
+        REG_DEVICE_ID = #{regDeviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        CREATE_USER = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        UPDATE_USER = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        IS_DELETE = #{isDelete,jdbcType=TINYINT},
+      </if>
+    </set>
+    where UUID = #{uuid,jdbcType=VARCHAR}
+  </update>
+  <select id="selectSelective" parameterType="com.hhly.user.entity.User" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    FROM T_USER
+    <where>
+      <if test="uuid != null">
+        and UUID = #{uuid,jdbcType=VARCHAR}
+      </if>
+      <if test="loginName != null">
+        and LOGIN_NAME = #{loginName,jdbcType=VARCHAR}
+      </if>
+      <if test="realName != null">
+        and REAL_NAME = #{realName,jdbcType=VARCHAR}
+      </if>
+      <if test="password != null">
+        and PASSWORD = #{password,jdbcType=VARCHAR}
+      </if>
+      <if test="phone != null">
+        and PHONE = #{phone,jdbcType=VARCHAR}
+      </if>
+      <if test="email != null">
+        and EMAIL = #{email,jdbcType=VARCHAR}
+      </if>
+      <if test="state != null">
+        and STATE = #{state,jdbcType=TINYINT}
+      </if>
+      <if test="stateDesc != null">
+        and STATE_DESC = #{stateDesc,jdbcType=VARCHAR}
+      </if>
+      <if test="accType != null">
+        and ACC_TYPE = #{accType,jdbcType=TINYINT}
+      </if>
+      <if test="regType != null">
+        and REG_TYPE = #{regType,jdbcType=TINYINT}
+      </if>
+      <if test="isAuth != null">
+        and IS_AUTH = #{isAuth,jdbcType=TINYINT}
+      </if>
+      <if test="appCode != null">
+        and APP_CODE = #{appCode,jdbcType=VARCHAR}
+      </if>
+      <if test="regDeviceType != null">
+        and REG_DEVICE_TYPE = #{regDeviceType,jdbcType=VARCHAR}
+      </if>
+      <if test="regDeviceId != null">
+        and REG_DEVICE_ID = #{regDeviceId,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+        and CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="createUser != null">
+        and CREATE_USER = #{createUser,jdbcType=VARCHAR}
+      </if>
+      <if test="updateTime != null">
+        and UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateUser != null">
+        and UPDATE_USER = #{updateUser,jdbcType=VARCHAR}
+      </if>
+      <if test="isDelete != null">
+        and IS_DELETE = #{isDelete,jdbcType=TINYINT}
+      </if>
+    </where>
+  </select>
+
+
+  <select id="selectUserWithPage" resultMap="BaseResultMap2">
+    select
+    <include refid="Base_Column_List2" />
+    FROM T_USER
+    <where>
+      AND IS_DELETE = 0
+      <if test="condition.accType != null">
+        AND ACC_TYPE = #{condition.accType}
+      </if>
+      <if test="condition.loginName != null">
+        AND LOGIN_NAME LIKE concat('%',#{condition.loginName},'%')
+      </if>
+      <if test="condition.realName != null">
+        AND REAL_NAME LIKE concat('%',#{condition.realName},'%')
+      </if>
+      <if test="condition.email != null">
+        AND EMAIL LIKE concat('%',#{condition.email},'%')
+      </if>
+      <if test="condition.phone != null">
+        AND PHONE LIKE concat('%',#{condition.phone},'%')
+      </if>
+      <if test="condition.state != null">
+        AND STATE = #{condition.state}
+      </if>
+      <if test="condition.createTimeBegin != null">
+        AND CREATE_TIME &gt;= str_to_date(#{condition.createTimeBegin}, '%Y-%m-%d %h:%i:%s')
+      </if>
+      <if test="condition.createTimeEnd != null">
+        AND CREATE_TIME &lt;= str_to_date(#{condition.createTimeEnd}, '%Y-%m-%d %h:%i:%s')
+      </if>
+    </where>
+    ORDER BY CREATE_TIME DESC
+  </select>
+  
+  <select id="countRegUserByDays" resultType="com.hhly.user.api.dto.response.CountRegUserResp">
+    SELECT
+    DATE_FORMAT(CREATE_TIME,'%Y-%m-%d') everyday,count(1) as total
+    FROM T_USER
+    WHERE IS_DELETE = 0
+    <if test="condition.accType != null">
+      AND ACC_TYPE = #{condition.accType}
+    </if>
+    <if test="condition.regDeviceType != null">
+      AND REG_DEVICE_TYPE = #{condition.regDeviceType}
+    </if>
+    <if test="condition.createTimeBegin != null">
+      AND CREATE_TIME &gt;= concat(#{condition.createTimeBegin},' 00:00:00')
+    </if>
+    <if test="condition.createTimeEnd != null">
+      AND CREATE_TIME &lt;= concat(#{condition.createTimeEnd},' 23:59:59')
+    </if>
+    group by everyday
+  </select>
+
+  <select id="countRegUser" resultType="java.lang.Integer">
+    SELECT
+    count(1) as total
+    FROM T_USER
+    WHERE IS_DELETE = 0
+    <if test="accType != null">
+      AND ACC_TYPE = #{accType}
+    </if>
+  </select>
+
+</mapper>

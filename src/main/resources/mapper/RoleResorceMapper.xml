@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhly.user.mapper.RoleResourceMapper">
+
+  <cache type="com.hhly.user.component.UserMybatisRedisCache" flushInterval="86400000"/>
+
+  <resultMap id="BaseResultMap" type="com.hhly.user.entity.RoleResource">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="UUID" jdbcType="VARCHAR" property="uuid" />
+    <result column="ROLE_CODE" jdbcType="VARCHAR" property="roleCode" />
+    <result column="RES_CODE" jdbcType="VARCHAR" property="resCode" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="CREATE_USER" jdbcType="VARCHAR" property="createUser" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="UPDATE_USER" jdbcType="VARCHAR" property="updateUser" />
+    <result column="IS_DELETE" jdbcType="TINYINT" property="isDelete" />
+  </resultMap>
+
+  <resultMap id="BindResourceMap" type="com.hhly.user.api.dto.response.RoleBindResQueryResp">
+    <result column="RES_CODE" jdbcType="VARCHAR" property="resCode" />
+    <result column="RES_NAME" jdbcType="VARCHAR" property="resName" />
+    <result column="BIND_TIME" jdbcType="TIMESTAMP" property="bindTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID,UUID, ROLE_CODE, RES_CODE, CREATE_TIME, CREATE_USER, UPDATE_TIME, UPDATE_USER, IS_DELETE
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_ROLE_RESOURCE
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from T_ROLE_RESOURCE
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.hhly.user.entity.RoleResource">
+    insert into T_ROLE_RESOURCE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="uuid != null">
+        UUID,
+      </if>
+      <if test="roleCode != null">
+        ROLE_CODE,
+      </if>
+      <if test="resCode != null">
+        RES_CODE,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="createUser != null">
+        CREATE_USER,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+      <if test="updateUser != null">
+        UPDATE_USER,
+      </if>
+      <if test="isDelete != null">
+        IS_DELETE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="uuid != null">
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="roleCode != null">
+        #{roleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="resCode != null">
+        #{resCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hhly.user.entity.RoleResource">
+    update T_ROLE_RESOURCE
+    <set>
+      <if test="roleCode != null">
+        ROLE_CODE = #{roleCode,jdbcType=INTEGER},
+      </if>
+      <if test="resCode != null">
+        RES_CODE = #{resCode,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        CREATE_USER = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        UPDATE_USER = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        IS_DELETE = #{isDelete,jdbcType=TINYINT},
+      </if>
+    </set>
+    where UUID = #{uuid,jdbcType=VARCHAR}
+  </update>
+
+
+  <select id="selectSelective" parameterType="com.hhly.user.entity.RoleResource" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM T_ROLE_RESOURCE
+    <where>
+      <if test="id != null">
+        and ID = #{id,jdbcType=INTEGER}
+      </if>
+      <if test="uuid != null">
+        and UUID = #{uuid,jdbcType=VARCHAR}
+      </if>
+      <if test="roleCode != null">
+       and  ROLE_CODE = #{roleCode,jdbcType=VARCHAR}
+      </if>
+      <if test="resCode != null">
+        and  RES_CODE = #{resCode,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+        and CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="createUser != null">
+        and CREATE_USER = #{createUser,jdbcType=VARCHAR}
+      </if>
+      <if test="updateTime != null">
+        and UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateUser != null">
+        and UPDATE_USER = #{updateUser,jdbcType=VARCHAR}
+      </if>
+      <if test="isDelete != null">
+        and IS_DELETE = #{isDelete,jdbcType=TINYINT}
+      </if>
+    </where>
+
+  </select>
+
+  <delete id="deleteByRoleResourceCode">
+    delete from T_ROLE_RESOURCE
+    where ROLE_CODE = #{roleCode,jdbcType=VARCHAR}
+    AND RES_CODE  IN
+    <foreach collection="list" item="code"  open="(" separator="," close=")">
+      #{code}
+    </foreach>
+  </delete>
+
+  <delete id="deleteByResourceCode">
+      delete from T_ROLE_RESOURCE
+      where RES_CODE  IN
+      <foreach collection="list" item="code"  open="(" separator="," close=")">
+        #{code}
+      </foreach>
+  </delete>
+
+  <delete id="deleteByRoleCodes">
+    delete from T_ROLE_RESOURCE
+    where ROLE_CODE  IN
+    <foreach collection="list" item="code"  open="(" separator="," close=")">
+      #{code}
+    </foreach>
+  </delete>
+
+  <select id="selectResCodesByRoleCodes" resultType="java.lang.String">
+    SELECT
+    RES_CODE
+    FROM T_ROLE_RESOURCE
+    WHERE IS_DELETE = 0
+    AND ROLE_CODE IN
+    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+
+  <select id="selectRoleCodesByResCodes" resultType="java.lang.String">
+    SELECT
+    ROLE_CODE
+    FROM T_ROLE_RESOURCE
+    WHERE IS_DELETE = 0
+    AND RES_CODE IN
+    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+
+  <select id="selectBindResource" resultMap="BindResourceMap" useCache="false">
+    SELECT
+    RES.CODE RES_CODE,
+    RES.NAME RES_NAME,
+    RR.CREATE_TIME BIND_TIME
+    FROM T_ROLE_RESOURCE RR INNER JOIN T_RESOURCE RES ON RR.RES_CODE = RES.CODE
+    WHERE RR.ROLE_CODE = #{condition.roleCode,jdbcType=VARCHAR}
+    AND RES.APP_CODE = #{condition.appCode,jdbcType=VARCHAR}
+    <if test="condition.resName != null">
+      AND RES.NAME LIKE CONCAT('%',#{condition.resName},'%')
+    </if>
+  </select>
+
+  <select id="selectNotBindResource" resultMap="BindResourceMap" useCache="false">
+    SELECT
+    CODE RES_CODE,
+    NAME RES_NAME,
+    NULL CREATE_TIME
+    FROM T_RESOURCE
+    WHERE STATE = 1
+    AND APP_CODE = #{condition.appCode,jdbcType=VARCHAR}
+    AND CODE NOT IN (
+      SELECT RES_CODE FROM T_ROLE_RESOURCE WHERE ROLE_CODE = #{condition.roleCode,jdbcType=VARCHAR}
+    )
+    <if test="condition.resName != null">
+      AND NAME LIKE CONCAT('%',#{condition.resName},'%')
+    </if>
+  </select>
+
+  <insert id="insertBatch" parameterType="java.util.List">
+    INSERT INTO T_ROLE_RESOURCE (UUID,ROLE_CODE,RES_CODE,CREATE_USER) VALUES
+    <foreach collection="list" item="item" index="index" separator="," >
+      ( #{item.uuid},#{item.roleCode},#{item.resCode},#{item.createUser} )
+    </foreach>
+  </insert>
+</mapper>

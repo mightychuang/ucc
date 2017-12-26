@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhly.user.mapper.ApplicationMapper">
+
+  <cache type="com.hhly.user.component.UserMybatisRedisCache" flushInterval="86400000"/>
+
+  <resultMap id="BaseResultMap" type="com.hhly.user.entity.Application">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="UUID" jdbcType="VARCHAR" property="uuid" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="CODE" jdbcType="VARCHAR" property="code" />
+    <result column="STATE" jdbcType="TINYINT" property="state" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="CREATE_USER" jdbcType="VARCHAR" property="createUser" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="UPDATE_USER" jdbcType="VARCHAR" property="updateUser" />
+    <result column="IS_DELETE" jdbcType="TINYINT" property="isDelete" />
+  </resultMap>
+
+
+  <resultMap id="shortResultMap" type="com.hhly.user.api.dto.response.ApplicationResp">
+    <result column="CODE" jdbcType="VARCHAR" property="appCode" />
+    <result column="NAME" jdbcType="VARCHAR" property="appName" />
+    <result column="STATE" jdbcType="TINYINT" property="state" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List">
+    ID, NAME, CODE, STATE, CREATE_TIME, CREATE_USER, UPDATE_TIME, UPDATE_USER, IS_DELETE
+  </sql>
+
+  <sql id="Query_Column_List">
+    ID,UUID, NAME, CODE, STATE, CREATE_TIME, CREATE_USER, UPDATE_TIME, UPDATE_USER, IS_DELETE
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Query_Column_List" />
+    from T_APPLICATION
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from T_APPLICATION
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.hhly.user.entity.Application">
+    insert into T_APPLICATION
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="uuid != null">
+        UUID,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="code != null">
+        CODE,
+      </if>
+      <if test="state != null">
+        STATE,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="createUser != null">
+        CREATE_USER,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+      <if test="updateUser != null">
+        UPDATE_USER,
+      </if>
+      <if test="isDelete != null">
+        IS_DELETE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="uuid != null">
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hhly.user.entity.Application">
+    update T_APPLICATION
+    <set>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        CODE = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        STATE = #{state,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        CREATE_USER = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        UPDATE_USER = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        IS_DELETE = #{isDelete,jdbcType=TINYINT},
+      </if>
+    </set>
+    where UUID = #{uuid,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectSelective" parameterType="com.hhly.user.entity.Application" resultMap="BaseResultMap">
+    select
+    <include refid="Query_Column_List" />
+    from T_APPLICATION
+    <where>
+      <if test="id != null">
+        and ID = #{id,jdbcType=INTEGER}
+      </if>
+      <if test="uuid != null">
+        and UUID = #{uuid,jdbcType=VARCHAR}
+      </if>
+      <if test="name != null">
+        and  NAME = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="code != null">
+        and CODE = #{code,jdbcType=VARCHAR}
+      </if>
+      <if test="state != null">
+        and STATE = #{state,jdbcType=TINYINT}
+      </if>
+      <if test="createTime != null">
+        and CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="createUser != null">
+        and CREATE_USER = #{createUser,jdbcType=VARCHAR}
+      </if>
+      <if test="updateTime != null">
+        and UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateUser != null">
+        and UPDATE_USER = #{updateUser,jdbcType=VARCHAR}
+      </if>
+      <if test="isDelete != null">
+        and IS_DELETE = #{isDelete,jdbcType=TINYINT}
+      </if>
+    </where>
+  </select>
+
+  <update id="updateByCode" parameterType="com.hhly.user.entity.Application">
+    update T_APPLICATION
+    <set>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        CODE = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        STATE = #{state,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        CREATE_USER = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        UPDATE_USER = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        IS_DELETE = #{isDelete,jdbcType=TINYINT},
+      </if>
+    </set>
+    where CODE = #{code,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectList" resultMap="shortResultMap">
+    select
+    <include refid="Query_Column_List" />
+    from T_APPLICATION
+    <where>
+      IS_DELETE = 0
+      <if test="condition.state != null">
+        and STATE = #{condition.state,jdbcType=TINYINT}
+      </if>
+      <if test="condition.name != null">
+        and NAME LIKE CONCAT('%',#{condition.name,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="condition.code != null">
+        and CODE = #{condition.code,jdbcType=VARCHAR}
+      </if>
+
+    </where>
+
+  </select>
+
+</mapper>

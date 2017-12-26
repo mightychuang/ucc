@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hhly.user.mapper.BlackListMapper" >
+    <resultMap id="BaseResultMap" type="com.hhly.user.entity.BlackList" >
+        <id column="ID" property="id" jdbcType="INTEGER" />
+        <result column="BLACK_NAME" property="blackName" jdbcType="VARCHAR" />
+        <result column="BLACK_TYPE" property="blackType" jdbcType="VARCHAR" />
+        <result column="FOREVER" property="forever" jdbcType="TINYINT" />
+        <result column="EXPIRARTION_TIME" property="expirartionTime" jdbcType="TIMESTAMP" />
+        <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="CREATE_USER" property="createUser" jdbcType="VARCHAR" />
+        <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="UPDATE_USER" property="updateUser" jdbcType="VARCHAR" />
+        <result column="IS_DELETE" property="isDelete" jdbcType="TINYINT" />
+    </resultMap>
+    <sql id="Base_Table">
+        T_BLACKLIST
+    </sql>
+    <sql id="Base_Column_List" >
+        ID, BLACK_NAME, BLACK_TYPE, FOREVER, EXPIRARTION_TIME, DESCRIPTION, CREATE_TIME,
+        CREATE_USER, UPDATE_TIME, UPDATE_USER, IS_DELETE
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        SELECT <include refid="Base_Column_List" />
+        FROM <include refid="Base_Table" />
+        WHERE ID = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectSelective" parameterType="com.hhly.user.entity.BlackList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM <include refid="Base_Table" />
+        <where>
+            IS_DELETE =0
+            <if test="id != null">
+                AND ID = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="blackName != null">
+                AND BLACK_NAME = #{blackName,jdbcType=VARCHAR}
+            </if>
+            <if test="blackType != null">
+                AND BLACK_TYPE = #{blackType,jdbcType=VARCHAR}
+            </if>
+            <if test="forever != null">
+                AND FOREVER = #{forever,jdbcType=TINYINT}
+            </if>
+            <if test="description != null">
+                AND DESCRIPTION LIKE concat(concat('%',#{description}),'%')
+            </if>
+            <if test="createUser != null">
+                AND CREATE_USER = #{createUser,jdbcType=VARCHAR}
+            </if>
+            <if test="updateUser != null">
+                AND UPDATE_USER = #{updateUser,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        UPDATE <include refid="Base_Table" />
+        SET IS_DELETE = 1
+        WHERE ID = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insertSelective" parameterType="com.hhly.user.entity.BlackList" useGeneratedKeys="true" keyColumn="ID" keyProperty="id" >
+        INSERT INTO <include refid="Base_Table" />
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="blackName != null">
+                BLACK_NAME,
+            </if>
+            <if test="blackType != null">
+                BLACK_TYPE,
+            </if>
+            <if test="forever != null">
+                FOREVER,
+            </if>
+            <if test="expirartionTime != null">
+                EXPIRARTION_TIME,
+            </if>
+            <if test="description != null">
+                DESCRIPTION,
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME,
+            </if>
+            <if test="createUser != null">
+                CREATE_USER,
+            </if>
+            <if test="updateTime != null">
+                UPDATE_TIME,
+            </if>
+            <if test="updateUser != null">
+                UPDATE_USER,
+            </if>
+            <if test="isDelete != null">
+                IS_DELETE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="blackName != null">
+                #{blackName,jdbcType=VARCHAR},
+            </if>
+            <if test="blackType != null">
+                #{blackType,jdbcType=VARCHAR},
+            </if>
+            <if test="forever != null">
+                #{forever,jdbcType=TINYINT},
+            </if>
+            <if test="expirartionTime != null">
+                #{expirartionTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUser != null">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null">
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.hhly.user.entity.BlackList" >
+        UPDATE <include refid="Base_Table" />
+        <set >
+            <if test="blackName != null">
+                BLACK_NAME = #{blackName,jdbcType=VARCHAR},
+            </if>
+            <if test="blackType != null">
+                BLACK_TYPE = #{blackType,jdbcType=VARCHAR},
+            </if>
+            <if test="forever != null">
+                FOREVER = #{forever,jdbcType=TINYINT},
+            </if>
+            <if test="expirartionTime != null">
+                EXPIRARTION_TIME = #{expirartionTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="description != null">
+                DESCRIPTION = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUser != null">
+                CREATE_USER = #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null">
+                UPDATE_USER = #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null">
+                IS_DELETE = #{isDelete,jdbcType=TINYINT},
+            </if>
+        </set>
+        WHERE ID = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectWithPage" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM <include refid="Base_Table" />
+        WHERE IS_DELETE = 0
+        <if test="condition.blackName != null">
+            AND BLACK_NAME LIKE concat('%',#{condition.blackName},'%')
+        </if>
+        <if test="condition.blackType != null">
+            AND BLACK_TYPE = #{condition.blackType,jdbcType=VARCHAR}
+        </if>
+        <if test="condition.expireStartTime != null">
+            AND EXPIRARTION_TIME &gt;= str_to_date(#{condition.expireStartTime}, '%Y-%m-%d %H:%i:%s')
+        </if>
+        <if test="condition.expireEndTime != null">
+            AND EXPIRARTION_TIME &lt;= str_to_date(#{condition.expireEndTime}, '%Y-%m-%d %H:%i:%s')
+        </if>
+    </select>
+
+    <select id="selectUniqueness" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM <include refid="Base_Table" />
+        WHERE IS_DELETE = 0
+        <if test="blackName != null">
+            AND BLACK_NAME = #{blackName,jdbcType=VARCHAR}
+        </if>
+        <if test="blackType != null">
+            AND BLACK_TYPE = #{blackType,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="selectBlackList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM <include refid="Base_Table" />
+        WHERE IS_DELETE = 0 AND EXPIRARTION_TIME >= CURRENT_TIMESTAMP
+    </select>
+
+</mapper>

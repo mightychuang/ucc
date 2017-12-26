@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhly.user.mapper.ResourceMapper">
+
+  <cache type="com.hhly.user.component.UserMybatisRedisCache" flushInterval="86400000"/>
+
+  <resultMap id="BaseResultMap" type="com.hhly.user.entity.Resource">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="UUID" jdbcType="VARCHAR" property="uuid" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="CODE" jdbcType="VARCHAR" property="code" />
+    <result column="SELF_ID" jdbcType="INTEGER" property="selfId" />
+    <result column="PARENT_ID" jdbcType="INTEGER" property="parentId" />
+    <result column="PATH" jdbcType="VARCHAR" property="path" />
+    <result column="DEPTH" jdbcType="TINYINT" property="depth" />
+    <result column="URL" jdbcType="VARCHAR" property="url" />
+    <result column="SEQ" jdbcType="TINYINT" property="seq" />
+    <result column="ICON" jdbcType="VARCHAR" property="icon" />
+    <result column="TYPE_" jdbcType="VARCHAR" property="type" />
+    <result column="METHOD" jdbcType="VARCHAR" property="method" />
+    <result column="STATE" jdbcType="TINYINT" property="state" />
+    <result column="APP_CODE" jdbcType="VARCHAR" property="appCode" />
+    <result column="APPLY_TO" jdbcType="VARCHAR" property="applyTo" />
+    <result column="JOIN_WHITE_LIST" jdbcType="TINYINT" property="joinWhiteList" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="CREATE_USER" jdbcType="VARCHAR" property="createUser" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="UPDATE_USER" jdbcType="VARCHAR" property="updateUser" />
+    <result column="IS_DELETE" jdbcType="TINYINT" property="isDelete" />
+  </resultMap>
+
+  <resultMap id="treeMap" type="com.hhly.user.api.dto.response.MenuTree">
+    <id column="SELF_ID" jdbcType="INTEGER" property="selfId" />
+    <result column="NAME" jdbcType="VARCHAR" property="text" />
+    <result column="CODE" jdbcType="VARCHAR" property="code" />
+    <result column="PARENT_ID" jdbcType="INTEGER" property="parentId" />
+    <result column="URL" jdbcType="VARCHAR" property="url" />
+    <result column="SEQ" jdbcType="TINYINT" property="seq" />
+    <result column="ICON" jdbcType="VARCHAR" property="icon" />
+    <result column="STATE" jdbcType="TINYINT" property="state" />
+  </resultMap>
+
+
+  <resultMap id="menuTreeMap" type="com.hhly.user.api.dto.response.MenuTree">
+    <id column="SELF_ID" jdbcType="INTEGER" property="selfId" />
+    <result column="NAME" jdbcType="VARCHAR" property="text" />
+    <result column="CODE" jdbcType="VARCHAR" property="code" />
+    <result column="PARENT_ID" jdbcType="INTEGER" property="parentId" />
+    <result column="URL" jdbcType="VARCHAR" property="url" />
+    <result column="SEQ" jdbcType="TINYINT" property="seq" />
+    <result column="ICON" jdbcType="VARCHAR" property="icon" />
+    <result column="STATE" jdbcType="TINYINT" property="state" />
+    <collection property="children" ofType="com.hhly.user.api.dto.response.MenuTree" column="SELF_ID" select="selectChildrenById" />
+  </resultMap>
+
+  <resultMap id="navigationTreeMap" type="com.hhly.user.api.dto.response.MenuTree">
+    <id column="SELF_ID" jdbcType="INTEGER" property="selfId" />
+    <result column="NAME" jdbcType="VARCHAR" property="text" />
+    <result column="CODE" jdbcType="VARCHAR" property="code" />
+    <result column="PARENT_ID" jdbcType="INTEGER" property="parentId" />
+    <result column="URL" jdbcType="VARCHAR" property="url" />
+    <result column="SEQ" jdbcType="TINYINT" property="seq" />
+    <result column="ICON" jdbcType="VARCHAR" property="icon" />
+    <result column="STATE" jdbcType="TINYINT" property="state" />
+  </resultMap>
+
+  <resultMap id="allMenusMap" type="com.hhly.user.api.dto.response.MenuTree">
+    <id column="SELF_ID" jdbcType="INTEGER" property="selfId" />
+    <result column="NAME" jdbcType="VARCHAR" property="text" />
+    <result column="CODE" jdbcType="VARCHAR" property="code" />
+    <result column="PARENT_ID" jdbcType="INTEGER" property="parentId" />
+    <result column="URL" jdbcType="VARCHAR" property="url" />
+    <result column="SEQ" jdbcType="TINYINT" property="seq" />
+    <result column="ICON" jdbcType="VARCHAR" property="icon" />
+    <result column="STATE" jdbcType="TINYINT" property="state" />
+    <result column="APP_CODE" jdbcType="VARCHAR" property="appCode" />
+    <collection property="children" ofType="com.hhly.user.api.dto.response.MenuTree" column="{parentId=SELF_ID,appCode=APP_CODE}" select="getAllMenus" />
+  </resultMap>
+
+  <sql id="Query_Column_List">
+    ID,UUID, NAME, CODE, SELF_ID,PARENT_ID, PATH, DEPTH, URL, SEQ, ICON, TYPE_,METHOD, STATE, APP_CODE, APPLY_TO,JOIN_WHITE_LIST,
+    CREATE_TIME, CREATE_USER, UPDATE_TIME, UPDATE_USER, IS_DELETE
+  </sql>
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Query_Column_List" />
+    from T_RESOURCE
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from T_RESOURCE
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.hhly.user.entity.Resource">
+    insert into T_RESOURCE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="uuid != null">
+        UUID,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="code != null">
+        CODE,
+      </if>
+      <if test="selfId != null">
+        SELF_ID,
+      </if>
+      <if test="parentId != null">
+        PARENT_ID,
+      </if>
+      <if test="path != null">
+        PATH,
+      </if>
+      <if test="depth != null">
+        DEPTH,
+      </if>
+      <if test="url != null">
+        URL,
+      </if>
+      <if test="seq != null">
+        SEQ,
+      </if>
+      <if test="icon != null">
+        ICON,
+      </if>
+      <if test="type != null">
+        TYPE_,
+      </if>
+      <if test="method != null">
+        METHOD,
+      </if>
+      <if test="state != null">
+        STATE,
+      </if>
+      <if test="appCode != null">
+        APP_CODE,
+      </if>
+      <if test="applyTo != null">
+        APPLY_TO,
+      </if>
+      <if test="joinWhiteList!=null">
+        JOIN_WHITE_LIST,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="createUser != null">
+        CREATE_USER,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+      <if test="updateUser != null">
+        UPDATE_USER,
+      </if>
+      <if test="isDelete != null">
+        IS_DELETE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="uuid != null">
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="selfId != null">
+        #{selfId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null">
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="depth != null">
+        #{depth,jdbcType=TINYINT},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null">
+        #{seq,jdbcType=TINYINT},
+      </if>
+      <if test="icon != null">
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="method != null">
+        #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=TINYINT},
+      </if>
+      <if test="appCode != null">
+        #{appCode,jdbcType=VARCHAR},
+      </if>
+      <if test="applyTo != null">
+        #{applyTo,jdbcType=VARCHAR},
+      </if>
+      <if test="joinWhiteList != null">
+        #{joinWhiteList,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hhly.user.entity.Resource">
+    update T_RESOURCE
+    <set>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        CODE = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="selfId != null">
+        SELF_ID = #{selfId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        PARENT_ID = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="path != null">
+        PATH = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="depth != null">
+        DEPTH = #{depth,jdbcType=TINYINT},
+      </if>
+      <if test="url != null">
+        URL = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null">
+        SEQ = #{seq,jdbcType=TINYINT},
+      </if>
+      <if test="icon != null">
+        ICON = #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        TYPE_ = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="method != null">
+        METHOD = #{method,jdbcType=TINYINT},
+      </if>
+      <if test="state != null">
+        STATE = #{state,jdbcType=TINYINT},
+      </if>
+      <if test="appCode != null">
+        APP_CODE = #{appCode,jdbcType=VARCHAR},
+      </if>
+      <if test="applyTo != null">
+        APPLY_TO = #{applyTo,jdbcType=VARCHAR},
+      </if>
+      <if test="joinWhiteList != null">
+        JOIN_WHITE_LIST= #{joinWhiteList,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        CREATE_USER = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        UPDATE_USER = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        IS_DELETE = #{isDelete,jdbcType=TINYINT},
+      </if>
+    </set>
+    where UUID = #{uuid,jdbcType=VARCHAR}
+  </update>
+
+
+  <select id="selectSelective" parameterType="com.hhly.user.entity.Resource" resultMap="BaseResultMap">
+    select
+    <include refid="Query_Column_List" />
+    from T_RESOURCE
+    <where>
+      <if test="id != null">
+        and ID = #{id,jdbcType=INTEGER}
+      </if>
+      <if test="uuid != null">
+        and UUID = #{uuid,jdbcType=VARCHAR}
+      </if>
+      <if test="name != null">
+        and NAME = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="code != null">
+        and CODE = #{code,jdbcType=VARCHAR}
+      </if>
+      <if test="selfId != null">
+        and SELF_ID = #{selfId,jdbcType=VARCHAR}
+      </if>
+      <if test="parentId != null">
+        and PARENT_ID = #{parentId,jdbcType=INTEGER}
+      </if>
+      <if test="path != null">
+        and PATH = #{path,jdbcType=VARCHAR}
+      </if>
+      <if test="depth != null">
+        and DEPTH = #{depth,jdbcType=TINYINT}
+      </if>
+      <if test="url != null">
+        and URL = #{url,jdbcType=VARCHAR}
+      </if>
+      <if test="seq != null">
+        and SEQ = #{seq,jdbcType=TINYINT}
+      </if>
+      <if test="icon != null">
+        and ICON = #{icon,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null">
+        and TYPE_ = #{type,jdbcType=TINYINT}
+      </if>
+      <if test="method != null">
+        and METHOD = #{method,jdbcType=TINYINT}
+      </if>
+      <if test="state != null">
+        and STATE = #{state,jdbcType=TINYINT}
+      </if>
+      <if test="appCode != null">
+        and APP_CODE = #{appCode,jdbcType=VARCHAR}
+      </if>
+      <if test="applyTo != null">
+        and APPLY_TO = #{applyTo,jdbcType=VARCHAR}
+      </if>
+      <if test="joinWhiteList != null">
+        and JOIN_WHITE_LIST= #{joinWhiteList,jdbcType=TINYINT}
+      </if>
+      <if test="createTime != null">
+        and CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="createUser != null">
+        and CREATE_USER = #{createUser,jdbcType=VARCHAR}
+      </if>
+      <if test="updateTime != null">
+        and UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateUser != null">
+        and UPDATE_USER = #{updateUser,jdbcType=VARCHAR}
+      </if>
+      <if test="isDelete != null">
+        and IS_DELETE = #{isDelete,jdbcType=TINYINT}
+      </if>
+
+    </where>
+  </select>
+
+
+  <select id="findTreeBySelfId" resultMap="menuTreeMap" useCache="false">
+    SELECT SELF_ID,NAME,CODE,PARENT_ID,URL,SEQ,ICON,STATE
+    FROM T_RESOURCE
+    WHERE SELF_ID = #{selfId,jdbcType=INTEGER}
+    ORDER BY DEPTH
+  </select>
+  <select id="selectChildrenById" resultMap="menuTreeMap" useCache="false">
+    SELECT SELF_ID,NAME,CODE,PARENT_ID,URL,SEQ,ICON,STATE
+    FROM T_RESOURCE
+    WHERE PARENT_ID = #{SELF_ID}
+  </select>
+
+ <select id="queryNavigationTree" resultMap="navigationTreeMap" useCache="false">
+    SELECT
+    DISTINCT SELF_ID,NAME,CODE,PARENT_ID,URL,SEQ,ICON,STATE
+    FROM T_RESOURCE
+    WHERE IS_DELETE = 0
+    <if test="state != null">
+      AND STATE = #{state,jdbcType=TINYINT}
+    </if>
+    <if test="parentId != null">
+      and PARENT_ID = #{parentId,jdbcType=INTEGER}
+    </if>
+    <if test="depth != null">
+      and DEPTH &lt;= #{depth,jdbcType=TINYINT}
+    </if>
+
+    AND CODE IN
+    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+
+    <if test="array != null">
+      and APP_CODE in
+      <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+
+  </select>
+
+
+  <select id="getAllMenus" resultMap="allMenusMap" useCache="false">
+    SELECT
+    SELF_ID,
+    NAME,
+    CODE,
+    PARENT_ID,
+    URL,
+    SEQ,
+    ICON,
+    STATE,
+    APP_CODE
+    FROM T_RESOURCE
+    <where>
+      <if test="parentId != null">
+        AND PARENT_ID = #{parentId,jdbcType=INTEGER}
+      </if>
+      <if test="appCode != null">
+        AND APP_CODE = #{appCode,jdbcType=VARCHAR}
+      </if>
+    </where>
+    ORDER BY SEQ
+  </select>
+
+
+  <update id="updateByCode" parameterType="com.hhly.user.entity.Resource">
+    update T_RESOURCE
+    <set>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        CODE = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="selfId != null">
+        SELF_ID = #{selfId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        PARENT_ID = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="path != null">
+        PATH = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="depth != null">
+        DEPTH = #{depth,jdbcType=TINYINT},
+      </if>
+      <if test="url != null">
+        URL = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null">
+        SEQ = #{seq,jdbcType=TINYINT},
+      </if>
+      <if test="icon != null">
+        ICON = #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        TYPE_ = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="method != null">
+        METHOD = #{method,jdbcType=TINYINT},
+      </if>
+      <if test="state != null">
+        STATE = #{state,jdbcType=TINYINT},
+      </if>
+      <if test="appCode != null">
+        APP_CODE = #{appCode,jdbcType=VARCHAR},
+      </if>
+      <if test="applyTo != null">
+        APPLY_TO = #{applyTo,jdbcType=VARCHAR},
+      </if>
+      <if test="joinWhiteList != null">
+        JOIN_WHITE_LIST= #{joinWhiteList,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        CREATE_USER = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        UPDATE_USER = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        IS_DELETE = #{isDelete,jdbcType=TINYINT},
+      </if>
+    </set>
+    where  CODE = #{code,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByList" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+      UPDATE T_RESOURCE SET
+      PARENT_ID = #{item.parentId},
+      PATH = #{item.path},
+      DEPTH = #{item.depth},
+      UPDATE_USER = #{item.updateUser}
+      WHERE SELF_ID = #{item.selfId}
+    </foreach>
+  </update>
+
+  <select id="selectExistCodeCount" resultType="int" >
+    SELECT count(1) FROM T_RESOURCE
+    WHERE APP_CODE = #{appCode,jdbcType=VARCHAR}
+    AND CODE IN
+    <foreach collection="list" item="code"  open="(" separator="," close=")">
+      #{code}
+    </foreach>
+
+  </select>
+
+  <select id="selectExistByAppCodeAndUrl" resultType="int" >
+    SELECT count(1) FROM T_RESOURCE
+    WHERE APP_CODE = #{appCode,jdbcType=VARCHAR}
+    AND URL = #{url,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByCodes" >
+    delete from T_RESOURCE
+    where CODE IN
+    <foreach collection="list" item="code"  open="(" separator="," close=")">
+      #{code}
+    </foreach>
+  </delete>
+
+  <select id="selectByCodes" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Query_Column_List" />
+    from T_RESOURCE
+    where CODE IN
+    <foreach collection="list" item="code"  open="(" separator="," close=")">
+      #{code}
+    </foreach>
+  </select>
+
+  <select id="getMaxSelfId" resultType="int" useCache="false">
+    SELECT ifnull(MAX(SELF_ID),0) FROM T_RESOURCE
+  </select>
+
+</mapper>

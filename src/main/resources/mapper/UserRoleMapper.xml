@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhly.user.mapper.UserRoleMapper">
+
+  <cache type="com.hhly.user.component.UserMybatisRedisCache" flushInterval="86400000"/>
+
+  <resultMap id="BaseResultMap" type="com.hhly.user.entity.UserRole">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="UUID" jdbcType="VARCHAR" property="uuid" />
+    <result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+    <result column="ROLE_CODE" jdbcType="VARCHAR" property="roleCode" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="CREATE_USER" jdbcType="VARCHAR" property="createUser" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="UPDATE_USER" jdbcType="VARCHAR" property="updateUser" />
+    <result column="IS_DELETE" jdbcType="TINYINT" property="isDelete" />
+  </resultMap>
+
+  <resultMap id="ExtResultMap" type="com.hhly.user.api.dto.response.UserRoleQueryResp">
+    <result column="UUID" jdbcType="VARCHAR" property="uuid" />
+    <result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="ROLE_ID" jdbcType="VARCHAR" property="roleId" />
+    <result column="ROLE_CODE" jdbcType="VARCHAR" property="roleCode" />
+    <result column="ROLE_NAME" jdbcType="VARCHAR" property="roleName" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    ID,UUID, USER_ID, ROLE_CODE, CREATE_TIME, CREATE_USER, UPDATE_TIME, UPDATE_USER, IS_DELETE
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_USER_ROLE
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from T_USER_ROLE
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+
+
+  <insert id="insertSelective" parameterType="com.hhly.user.entity.UserRole">
+    insert into T_USER_ROLE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="uuid != null">
+        UUID,
+      </if>
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="roleCode != null">
+        ROLE_CODE,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="createUser != null">
+        CREATE_USER,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+      <if test="updateUser != null">
+        UPDATE_USER,
+      </if>
+      <if test="isDelete != null">
+        IS_DELETE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="uuid != null">
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="roleCode != null">
+        #{roleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.hhly.user.entity.UserRole">
+    update T_USER_ROLE
+    <set>
+      <if test="userId != null">
+        USER_ID = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="roleCode != null">
+        ROLE_CODE = #{roleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        CREATE_USER = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        UPDATE_USER = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        IS_DELETE = #{isDelete,jdbcType=TINYINT},
+      </if>
+    </set>
+    where UUID = #{uuid,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectSelective" parameterType="com.hhly.user.entity.UserRole" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM T_USER_ROLE
+    <where>
+      <if test="id != null">
+       AND ID = #{id,jdbcType=INTEGER}
+      </if>
+      <if test="uuid != null">
+        and UUID = #{uuid,jdbcType=INTEGER}
+      </if>
+      <if test="userId != null">
+       and USER_ID = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="roleCode != null">
+        and  ROLE_CODE = #{roleCode,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+        and  CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="createUser != null">
+        and CREATE_USER = #{createUser,jdbcType=VARCHAR}
+      </if>
+      <if test="updateTime != null">
+        and UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateUser != null">
+        and UPDATE_USER = #{updateUser,jdbcType=VARCHAR}
+      </if>
+      <if test="isDelete != null">
+        and IS_DELETE = #{isDelete,jdbcType=TINYINT}
+      </if>
+    </where>
+  </select>
+
+
+  <insert id="insertBatch" parameterType="java.util.List">
+    INSERT INTO T_USER_ROLE (UUID,USER_ID,ROLE_CODE,CREATE_USER) VALUES
+    <foreach collection="list" item="item" index="index" separator="," >
+      ( #{item.uuid},#{item.userId},#{item.roleCode},#{item.createUser} )
+    </foreach>
+  </insert>
+
+  <delete id="deleteByUserId" parameterType="java.lang.String">
+    DELETE FROM T_USER_ROLE WHERE USER_ID = #{userId,jdbcType=VARCHAR}
+  </delete>
+
+
+  <delete id="deleteByUserRoleCodes">
+    DELETE FROM T_USER_ROLE
+    WHERE USER_ID = #{userId,jdbcType=VARCHAR}
+    AND ROLE_CODE IN
+    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+
+  <delete id="deleteByRoleCodes">
+    DELETE FROM T_USER_ROLE
+    WHERE ROLE_CODE IN
+    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+
+
+  <select id="selectExistRoleCodes" resultType="java.lang.String">
+    SELECT
+    ROLE_CODE
+    FROM T_USER_ROLE
+    WHERE USER_ID = #{userId,jdbcType=VARCHAR}
+    AND IS_DELETE = 0
+
+    <if test="list != null">
+      AND ROLE_CODE IN
+      <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+
+  </select>
+
+
+  <select id="selectExistRoleCount" resultType="java.lang.Integer">
+    SELECT
+    COUNT(*)
+    FROM T_USER_ROLE
+    WHERE USER_ID = #{userId,jdbcType=VARCHAR}
+    AND ROLE_CODE IN
+    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+    AND IS_DELETE = 0
+  </select>
+
+
+  <select id="selectBindByUserId"  resultMap="ExtResultMap" useCache="false">
+    SELECT
+    UR.UUID,
+    UR.USER_ID,
+    UR.CREATE_TIME,
+    R.UUID ROLE_ID,
+    R.CODE ROLE_CODE,
+    R.NAME ROLE_NAME
+    FROM T_USER_ROLE UR INNER JOIN T_ROLE R ON UR.ROLE_CODE = R.CODE
+    WHERE UR.USER_ID = #{condition.userId,jdbcType=VARCHAR}
+
+    <if test="condition.roleName != null">
+      AND R.NAME LIKE concat('%',#{condition.roleName},'%')
+    </if>
+    AND R.APP_CODE IN
+    <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+
+  </select>
+
+
+  <select id="selectNotBindByUserId"  resultMap="ExtResultMap" useCache="false">
+    SELECT
+    NULL UUID,
+    NULL USER_ID,
+    NULL CREATE_TIME,
+    UUID ROLE_ID,
+    NAME ROLE_NAME,
+    CODE ROLE_CODE
+    FROM T_ROLE
+    WHERE IS_DELETE = 0
+    AND STATE = 1
+    AND CODE NOT IN (
+      SELECT ROLE_CODE FROM T_USER_ROLE WHERE USER_ID = #{condition.userId,jdbcType=VARCHAR}
+    )
+    <if test="condition.roleName != null">
+      AND NAME LIKE concat('%',#{condition.roleName},'%')
+    </if>
+    AND APP_CODE IN
+    <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+
+  </select>
+</mapper>
